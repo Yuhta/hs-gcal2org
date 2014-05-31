@@ -1,0 +1,4 @@
+*.hi
+*.o
+gcal2org
+gcal2org~
