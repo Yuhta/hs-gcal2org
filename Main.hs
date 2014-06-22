@@ -109,9 +109,11 @@ listEventsUri accessToken timeMin timeMax calendarId =
         pairToParam (k, v) = k ++ "=" ++ urlEncode v
 
 orgTimestamp :: DateTime -> DateTime -> String
-orgTimestamp s@(Date s1) e@(Date e1)
-  | addDays 1 s1 == e1 = "<" ++ show s ++ ">"
-  | otherwise          = "<" ++ show s ++ ">--<" ++ show e ++ ">"
+orgTimestamp s@(Date s1) (Date e2)
+  | s1 == e1  = "<" ++ show s ++ ">"
+  | otherwise = "<" ++ show s ++ ">--<" ++ show e ++ ">"
+  where e1 = addDays (-1) e2
+        e  = Date e1
 orgTimestamp s@(DateTime s1) e@(DateTime e1)
   | localDay s1 == localDay e1 = "<" ++ show s ++ "-" ++
                                  formatLocalTime "%R" e1 ++ ">"
