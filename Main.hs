@@ -37,8 +37,7 @@ instance FromJSON Event where
                          v .:  "start"       <*>
                          v .:  "end"
 
-data DateTime = Date     { date     :: Day }
-              | DateTime { dateTime :: LocalTime }
+data DateTime = Date Day | DateTime LocalTime
 
 instance Show DateTime where
   show (Date d)      = formatLocalTime "%F %a"    d
