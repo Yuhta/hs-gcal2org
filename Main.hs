@@ -44,10 +44,12 @@ instance Show DateTime where
   show (DateTime dt) = formatLocalTime "%F %a %R" dt
 
 instance FromJSON DateTime where
-  parseJSON (Object hm) = return $ case head . toList $ hm of
-    ("date",     String d)  -> Date     $ textToTime "%F"      d
-    ("dateTime", String dt) -> DateTime $ textToTime "%FT%T%z" dt
-    where textToTime fmt t = readTime defaultTimeLocale fmt $ T.unpack t
+  parseJSON (Object hm) = return $
+                          let [x] = toList hm >>= parse in x where
+    parse ("date",     String d)  = [Date     $ textToTime "%F"      d]
+    parse ("dateTime", String dt) = [DateTime $ textToTime "%FT%T%z" dt]
+    parse _                       = []
+    textToTime fmt = readTime defaultTimeLocale fmt . T.unpack
 
 data Calendar = Calendar { calendarId      :: T.Text
                          , calendarSummary :: T.Text
